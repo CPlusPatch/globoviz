@@ -8,7 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
+import { SFXPlayer } from "~/classes/audio";
 import Sidebar, {
     type SimulationConfig,
 } from "~/components/controls/sidebar.vue";
@@ -17,4 +18,19 @@ import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 
 const config = ref<SimulationConfig>({} as SimulationConfig);
 const date = ref(new Date());
+
+// When the window is first clicked, play sound
+const playBgMusic = () => {
+    SFXPlayer.stopAllSounds("music");
+    window.removeEventListener("click", playBgMusic);
+    const player = new SFXPlayer();
+
+    player.playSound("music");
+};
+
+window.addEventListener("click", playBgMusic);
+
+onUnmounted(() => {
+    window.removeEventListener("click", playBgMusic);
+});
 </script>

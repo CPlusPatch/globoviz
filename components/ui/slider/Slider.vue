@@ -8,7 +8,8 @@ import {
     SliderTrack,
     useForwardPropsEmits,
 } from "radix-vue";
-import { type HTMLAttributes, computed } from "vue";
+import { type HTMLAttributes, computed, watch } from "vue";
+import { SFXPlayer } from "~/classes/audio";
 
 const props = defineProps<
     SliderRootProps & { class?: HTMLAttributes["class"] }
@@ -22,6 +23,15 @@ const delegatedProps = computed(() => {
 });
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
+
+const player = new SFXPlayer();
+// When the slider is moved, play sound
+watch(
+    () => props.modelValue,
+    () => {
+        player.playSoundWithDebounce("tick", 10);
+    },
+);
 </script>
 
 <template>

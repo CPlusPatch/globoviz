@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import { useVModel } from "@vueuse/core";
-import type { HTMLAttributes } from "vue";
+import { type HTMLAttributes, watch } from "vue";
+import { SFXPlayer } from "~/classes/audio";
 
 const props = defineProps<{
     defaultValue?: string | number;
@@ -15,6 +16,12 @@ const emits =
 const modelValue = useVModel(props, "modelValue", emits, {
     passive: true,
     defaultValue: props.defaultValue,
+});
+
+const player = new SFXPlayer();
+// When the slider is moved, play sound
+watch(modelValue, () => {
+    player.playSoundWithDebounce("tick", 50);
 });
 </script>
 

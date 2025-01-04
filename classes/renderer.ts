@@ -120,12 +120,20 @@ export class GlobeVisualization {
     ) {
         this.windowHalfX = config.width / 2;
         this.windowHalfY = config.height / 2;
+    }
 
+    public async init(): Promise<void> {
         this.initScene();
         this.initGlobe();
         this.initAtmosphere();
         this.setupEventListeners();
         this.animate();
+
+        return new Promise((resolve) => {
+            this.globe.onGlobeReady(() => {
+                resolve();
+            });
+        });
     }
 
     /**
