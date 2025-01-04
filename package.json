@@ -1,0 +1,62 @@
+{
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "license": "GPL-3.0-only",
+    "author": {
+        "email": "contact@cpluspatch.com",
+        "name": "CPlusPatch",
+        "url": "https://cpluspatch.com"
+    },
+    "maintainers": [
+        {
+            "email": "contact@cpluspatch.com",
+            "name": "CPlusPatch",
+            "url": "https://cpluspatch.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CPlusPatch/web-landing.git"
+    },
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "lint": "bunx @biomejs/biome check ."
+    },
+    "dependencies": {
+        "@nuxt/fonts": "0.10.3",
+        "@nuxtjs/color-mode": "3.5.2",
+        "@nuxtjs/tailwindcss": "6.12.2",
+        "@tailwindcss/forms": "^0.5.9",
+        "@tailwindcss/typography": "^0.5.15",
+        "@vueuse/core": "^12.3.0",
+        "@vueuse/nuxt": "12.3.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "geojson": "^0.5.0",
+        "lucide-vue-next": "^0.469.0",
+        "nuxt": "^3.15.0",
+        "nuxt-security": "2.1.5",
+        "radix-vue": "^1.9.12",
+        "shadcn-nuxt": "0.11.3",
+        "tailwind-merge": "^2.6.0",
+        "tailwindcss-animate": "^1.0.7",
+        "three": "^0.172.0",
+        "three-globe": "^2.39.1",
+        "vue": "latest",
+        "vue-router": "latest"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@types/three": "^0.171.0",
+        "typescript": "^5.7.2"
+    },
+    "trustedDependencies": ["@biomejs/biome", "@parcel/watcher"],
+    "patchedDependencies": {
+        "three-globe@2.39.1": "patches/three-globe@2.39.1.patch"
+    }
+}
