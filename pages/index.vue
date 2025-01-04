@@ -1,5 +1,5 @@
 <template>
-    <SidebarProvider>
+    <SidebarProvider class="![--sidebar-width:20rem]">
         <SidebarInset>
             <GlobeVisualisation :config="config" v-model:current-time="date" />
         </SidebarInset>

@@ -430,7 +430,7 @@ export class GlobeVisualization {
     private getWorldRotationForDate = (date: Date): number => {
         const msSinceEpoch = date.getTime();
         const msSince1970 = msSinceEpoch - 0;
-        const msPerDay = 1000 * 60 * 60 * 24;
+        const msPerDay = 1000 * 60 * 60 * this.simulationConfig.time.hoursInDay;
         const daysSince1970 = msSince1970 / msPerDay;
         const rotation = (daysSince1970 * Math.PI * 2) % (Math.PI * 2);
 
@@ -447,7 +447,12 @@ export class GlobeVisualization {
     private getSunlightRotationForDate = (date: Date): number => {
         const msSinceEpoch = date.getTime();
         const msSince1970 = msSinceEpoch - 0;
-        const msPerYear = 1000 * 60 * 60 * 24 * 365;
+        const msPerYear =
+            1000 *
+            60 *
+            60 *
+            this.simulationConfig.time.hoursInDay *
+            this.simulationConfig.time.daysInYear;
         const yearsSince1970 = msSince1970 / msPerYear;
         const rotation = (yearsSince1970 * Math.PI * 2) % (Math.PI * 2);
 

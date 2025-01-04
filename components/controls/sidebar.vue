@@ -1,5 +1,5 @@
 <template>
-    <Sidebar side="right" class="[--sidebar-width:20rem]">
+    <Sidebar side="right">
         <SidebarRail />
         <SidebarHeader>
             <SidebarMenu>
@@ -13,7 +13,7 @@
             <Form>
                 <SidebarGroup>
                     <SidebarGroupLabel>Physics</SidebarGroupLabel>
-                    <SidebarGroupContent class="px-2">
+                    <SidebarGroupContent class="px-2 space-y-4">
                         <FormField v-slot="{ componentField, value, setValue }" name="axialTilt"
                             v-model:model-value="config.physics.axialTilt">
                             <FormItem>
@@ -33,7 +33,7 @@
                 </SidebarGroup>
                 <SidebarGroup>
                     <SidebarGroupLabel>Time</SidebarGroupLabel>
-                    <SidebarGroupContent class="px-2">
+                    <SidebarGroupContent class="px-2 space-y-4">
                         <FormField v-slot="{ componentField, value }" name="scale"
                             v-model:model-value="config.time.scale">
                             <FormItem>
@@ -44,6 +44,34 @@
                                     <FormDescription class="flex justify-between gap-2">
                                         <span>The speed at which time progresses</span>
                                         <span>{{ value }}x</span>
+                                    </FormDescription>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField v-slot="{ componentField, value }" name="hoursInDay"
+                            v-model:model-value="config.time.hoursInDay">
+                            <FormItem>
+                                <FormLabel>Day Length</FormLabel>
+                                <FormControl>
+                                    <Input type="number" v-bind="componentField" :min="1" :max="1000" />
+                                    <FormDescription class="flex justify-between gap-2">
+                                        <span></span>
+                                        <span>{{ value }} hours</span>
+                                    </FormDescription>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField v-slot="{ componentField, value }" name="daysInYear"
+                            v-model:model-value="config.time.daysInYear">
+                            <FormItem>
+                                <FormLabel>Year Length</FormLabel>
+                                <FormControl>
+                                    <Input type="number" v-bind="componentField" :min="1" :max="1000" />
+                                    <FormDescription class="flex justify-between gap-2">
+                                        <span></span>
+                                        <span>{{ value }} days</span>
                                     </FormDescription>
                                 </FormControl>
                                 <FormMessage />
@@ -114,6 +142,26 @@ const simConfigSchema = z.object({
         .step(1)
         .default(1)
         .describe("Time scale"),
+    hoursInDay: z
+        .number()
+        .min(1, {
+            message: "Day length must be at least 1",
+        })
+        .max(100, {
+            message: "Day length must be at most 1000",
+        })
+        .default(24)
+        .describe("Day length"),
+    daysInYear: z
+        .number()
+        .min(1, {
+            message: "Year length must be at least 1",
+        })
+        .max(1000, {
+            message: "Year length must be at most 1000",
+        })
+        .default(365.256366)
+        .describe("Year length"),
 });
 
 export interface SimulationConfig {
@@ -122,6 +170,8 @@ export interface SimulationConfig {
     };
     time: {
         scale: number;
+        hoursInDay: number;
+        daysInYear: number;
     };
 }
 
@@ -132,6 +182,8 @@ const config = reactive<SimulationConfig>({
     },
     time: {
         scale: defaultValues.scale,
+        hoursInDay: defaultValues.hoursInDay,
+        daysInYear: defaultValues.daysInYear,
     },
 });
 
