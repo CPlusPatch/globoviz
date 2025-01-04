@@ -23,6 +23,7 @@ import ThreeGlobe from "three-globe";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { degToRad } from "three/src/math/MathUtils.js";
 import type { SimulationConfig } from "~/components/controls/sidebar.vue";
+import WebGL from "three/addons/capabilities/WebGL.js";
 import AtmosphereMaterial, { type AtmosphereMaterialParameters } from "./glow";
 import { CustomOrbitCurve } from "./orbit";
 
@@ -140,8 +141,17 @@ export class GlobeVisualization {
      * Initializes the Three.js scene, camera, and renderer
      */
     private initScene(): void {
+        const canvas = document.createElement("canvas");
+        const context = WebGL.isWebGL2Available()
+            ? canvas.getContext("webgl2", { antialias: false, alpha: true })
+            : canvas.getContext("webgl", { antialias: false, alpha: true });
+
+        if (!context) {
+            throw new Error("WebGL context is not available");
+        }
+
         // Initialize renderer
-        this.renderer = new WebGLRenderer({ antialias: false, alpha: true });
+        this.renderer = new WebGLRenderer({ canvas, context });
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(this.config.width, this.config.height);
         this.renderer.setClearColor(0x000000, 0);
@@ -223,7 +233,6 @@ export class GlobeVisualization {
         });
 
         this.configureGlobeMaterial();
-        this.setGlobeRotation();
         this.scene.add(this.globe);
     }
 
@@ -263,14 +272,6 @@ export class GlobeVisualization {
             emissiveIntensity: 0.4,
             shininess: 0.7,
         });
-    }
-
-    /**
-     * Sets the initial rotation of the globe
-     */
-    private setGlobeRotation(): void {
-        this.globe.rotateY(-Math.PI * (5 / 9));
-        this.globe.rotateZ(-Math.PI / 6);
     }
 
     /**
@@ -414,6 +415,7 @@ export class GlobeVisualization {
         this.controls.update();
         this.animateGlobe();
         this.renderer.render(this.scene, this.camera);
+
         requestAnimationFrame(this.animate);
     };
 
