@@ -22,6 +22,7 @@ import {
 import ThreeGlobe from "three-globe";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { degToRad } from "three/src/math/MathUtils.js";
+import type { SimulationConfig } from "~/components/controls/sidebar.vue";
 import AtmosphereMaterial, { type AtmosphereMaterialParameters } from "./glow";
 import { CustomOrbitCurve } from "./orbit";
 
@@ -91,13 +92,6 @@ export interface OrbitData {
     inclination: number;
 }
 
-export interface GlobeVisualizationConstants {
-    /** Amount that all time values should be scaled by */
-    timeScale: number;
-    /** Earth's axial tilt in degrees */
-    earthAxialTilt: number;
-}
-
 /**
  * Manages a 3D globe visualization with flight paths and airport markers
  */
@@ -115,16 +109,15 @@ export class GlobeVisualization {
     private windowHalfX: number;
     private windowHalfY: number;
     public currentDate = new Date();
-    public constants: GlobeVisualizationConstants = {
-        timeScale: 1000,
-        earthAxialTilt: 23.5,
-    };
 
     /**
      * Creates a new globe visualization
      * @param config - Configuration options for the globe
      */
-    constructor(private config: GlobeConfig) {
+    constructor(
+        private config: GlobeConfig,
+        private simulationConfig: SimulationConfig,
+    ) {
         this.windowHalfX = config.width / 2;
         this.windowHalfY = config.height / 2;
 
@@ -422,7 +415,8 @@ export class GlobeVisualization {
     private tickTime = (): void => {
         const deltaMs = this.clock.getDelta() * 1000;
         this.currentDate = new Date(
-            this.currentDate.getTime() + deltaMs * this.constants.timeScale,
+            this.currentDate.getTime() +
+                deltaMs * this.simulationConfig.time.scale,
         );
     };
 
@@ -465,11 +459,15 @@ export class GlobeVisualization {
         this.atmosphere.material.uniforms.lightDirection.value = vector;
     };
 
+    public updateConfig(config: SimulationConfig): void {
+        this.simulationConfig = config;
+    }
+
     private animateGlobe = (): void => {
         // Set axial tilt and rotation of the Earth
         this.globe.setRotationFromEuler(
             new Euler(
-                degToRad(this.constants.earthAxialTilt),
+                degToRad(this.simulationConfig.physics.axialTilt),
                 this.getWorldRotationForDate(this.currentDate),
                 0,
             ),

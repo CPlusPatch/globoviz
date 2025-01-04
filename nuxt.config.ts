@@ -1,3 +1,5 @@
+import { fileURLToPath } from "bun";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: "2024-11-01",
@@ -13,9 +15,9 @@ export default defineNuxtConfig({
     imports: {
         autoImport: false,
     },
-    components: false,
-    alias: {
-        "@/ui": "./components/ui",
+    colorMode: {
+        classSuffix: "",
     },
+    components: false,
     ssr: false,
 });
