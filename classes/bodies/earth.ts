@@ -12,7 +12,7 @@ export class Earth extends CelestialBody {
             orbits: null,
             atmosphere: {
                 density: 1.225,
-                fullHeight: 0.025 * 6.371e-1, //100e3,
+                fullHeight: 10 * 6.371e-1, //100e3,
                 wavelength: [680e-3, 550e-3, 450e-3],
                 raighleighCoefficient: 0.0025,
                 mieCoefficient: 0.001,

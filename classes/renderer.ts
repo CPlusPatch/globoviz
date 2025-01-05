@@ -188,8 +188,6 @@ export class GlobeVisualization {
         this.group.add(this.earth);
 
         await this.earth.load();
-        this.earth.setWorldInverseQuaternionFromGroup(this.group);
-        this.earth.updateECFShaderGroupRotation(this.camera, this.group);
 
         const sun = new SunRenderer();
         await sun.load();
@@ -197,9 +195,6 @@ export class GlobeVisualization {
         this.group.add(sun);
 
         sun.updatePositionFromECEF(new Vector3(...(ecef as ECEF).sun[0]));
-        this.earth.updateSunPositionTexture(
-            new Vector3(...(ecef as ECEF).sun[0]),
-        );
 
         const stars = new StarsRenderer();
 
@@ -229,8 +224,6 @@ export class GlobeVisualization {
      */
     private animate = (): void => {
         this.tickTime();
-
-        this.earth.updateECFShaderGroupRotation(this.camera, this.group);
 
         this.updateBodies();
 
@@ -263,6 +256,18 @@ export class GlobeVisualization {
 
     public updateConfig(config: SimulationConfig): void {
         this.simulationConfig = config;
+        this.earth.body.setParameter(
+            "axialTilt",
+            this.simulationConfig.physics.axialTilt,
+        );
+        this.earth.body.setParameter(
+            "rotationPeriod",
+            this.simulationConfig.time.hoursInDay * 60 * 60,
+        );
+        this.earth.body.setParameter(
+            "orbitalPeriod",
+            this.simulationConfig.time.daysInYear * 24 * 60 * 60,
+        );
     }
 
     /**

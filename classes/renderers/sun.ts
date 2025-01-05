@@ -1,4 +1,9 @@
-import { DirectionalLight, TextureLoader, type Vector3 } from "three";
+import {
+    DirectionalLight,
+    DirectionalLightHelper,
+    TextureLoader,
+    type Vector3,
+} from "three";
 import { Lensflare, LensflareElement } from "three/addons/objects/Lensflare.js";
 import flare3 from "~/assets/textures/lens_flare_circle_64x64.jpg";
 import flare2 from "~/assets/textures/lens_flare_hexagon_256x256.jpg";
@@ -11,9 +16,12 @@ export class SunRenderer extends Lensflare {
     constructor() {
         super();
 
-        this.light = new DirectionalLight(0xffffff, 1);
-        this.dark = new DirectionalLight(0x404040, 0.5);
+        this.light = new DirectionalLight(0xffffff, 0);
+        this.dark = new DirectionalLight(0x404040, 0);
 
+        this.light.lookAt(0, 0, 0);
+
+        this.add(new DirectionalLightHelper(this.light, 10, "red"));
         this.add(this.light);
         this.add(this.dark);
     }
