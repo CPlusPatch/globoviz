@@ -13,6 +13,10 @@
         <TresDirectionalLight :position="lightPosition" :intensity="1" :look-at="position">
             <Lensflare :scale="1" :color="new Color('orange')" />
         </TresDirectionalLight>
+
+        <Suspense>
+            <OrbitVue :rotation="rotation" />
+        </Suspense>
     </TresGroup>
 </template>
 
@@ -20,12 +24,14 @@
 import { Line2 } from "@tresjs/cientos";
 import { useTexture } from "@tresjs/core";
 import { Color, Vector3 } from "three";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import ecef from "~/assets/data/ecef.json";
 import earthTexture from "~/assets/textures/8081_earthmap10k.jpg";
 import { Earth } from "~/classes/bodies/earth";
+import { Orbit } from "~/classes/orbits";
 import type { ECEF } from "~/classes/renderer";
 import { parameters, useIntervalFn } from "#imports";
+import OrbitVue from "./orbit.vue";
 
 const sunPosition = computed(() =>
     new Vector3(...(ecef as ECEF).sun[0]).multiplyScalar(
