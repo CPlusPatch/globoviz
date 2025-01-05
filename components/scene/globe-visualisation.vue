@@ -1,10 +1,10 @@
 <template>
-    <div class="flex flex-1 bg-cover bg-center relative" :style="{ backgroundImage: `url(${stars})` }">
+    <div class="flex flex-1 bg-black relative">
         <header class="flex h-16 shrink-0 items-center gap-2 border-b border-l rounded-bl px-4 absolute right-0">
             <SidebarTrigger class="-ml-1" />
         </header>
         <div ref="container" class="h-full w-full"></div>
-        
+
         <Transition leave-active-class="duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">
             <Loading v-if="!loaded" />
         </Transition>
@@ -13,10 +13,7 @@
 
 <script lang="ts" setup>
 import { useIntervalFn } from "@vueuse/core";
-import type { FeatureCollection } from "geojson";
 import { onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
-import countries from "~/assets/data/globe-data.json";
-import stars from "~/assets/textures/stars.jpg";
 import { GlobeVisualization } from "~/classes/renderer";
 import type { SimulationConfig } from "../controls/sidebar.vue";
 import { SidebarTrigger } from "../ui/sidebar";
@@ -48,14 +45,6 @@ onMounted(async () => {
 
     await globe.value.init();
     loaded.value = true;
-    globe.value.updateCountries(countries as unknown as FeatureCollection);
-    globe.value.updateOrbits([
-        {
-            apoapsis: 240,
-            periapsis: 100,
-            inclination: 0,
-        },
-    ]);
 });
 
 watch(props.config, (newConfig) => {

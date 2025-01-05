@@ -1,0 +1,6 @@
+{
+    "glsllint.additionalStageAssociations": {
+        ".glslf": "frag",
+        ".glslv": "vert"
+    }
+}
