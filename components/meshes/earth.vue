@@ -24,13 +24,12 @@
 import { Line2 } from "@tresjs/cientos";
 import { useTexture } from "@tresjs/core";
 import { Color, Vector3 } from "three";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import ecef from "~/assets/data/ecef.json";
 import earthTexture from "~/assets/textures/8081_earthmap10k.jpg";
 import { Earth } from "~/classes/bodies/earth";
-import { Orbit } from "~/classes/orbits";
 import type { ECEF } from "~/classes/renderer";
-import { parameters, useIntervalFn } from "#imports";
+import { parameters, useIntervalFn, useNewBody } from "#imports";
 import OrbitVue from "./orbit.vue";
 
 const sunPosition = computed(() =>
@@ -39,15 +38,11 @@ const sunPosition = computed(() =>
     ),
 );
 
-const body = new Earth();
-
-watch(parameters, (np) => {
-    body.setParameter("axialTilt", np.physics.axialTilt);
-});
+const body = useNewBody(new Earth());
 
 const position = computed(() => new Vector3(0, 0, 0));
 const radius = computed(
-    () => body.getParameters().radius * parameters.physics.sizeScale,
+    () => body.value.getParameters().radius * parameters.physics.sizeScale,
 );
 
 // Light should be positioned between the sun and the earth, at a distance of 2*radius of the earth from the earth
@@ -58,15 +53,17 @@ const lightPosition = computed(() =>
         .multiplyScalar(2000 * radius.value),
 );
 
-console.log(lightPosition.value);
-
 const textures = await useTexture({
     map: earthTexture,
 });
 
-const rotation = ref(body.getPositionAndRotationForDate(new Date()).rotation);
+const rotation = ref(
+    body.value.getPositionAndRotationForDate(new Date()).rotation,
+);
 
 useIntervalFn(() => {
-    rotation.value = body.getPositionAndRotationForDate(new Date()).rotation;
+    rotation.value = body.value.getPositionAndRotationForDate(
+        new Date(),
+    ).rotation;
 }, 10);
 </script>

@@ -16,7 +16,6 @@ import Sidebar, {
 import GlobeVisualisation from "~/components/scene/globe-visualisation.vue";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 
-const config = ref<SimulationConfig>({} as SimulationConfig);
 const date = ref(new Date());
 
 // When the window is first clicked, play sound

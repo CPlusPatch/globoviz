@@ -46,5 +46,6 @@ import Loading from "./loading.vue";
 const date = defineModel<Date>("currentTime", {
     default: new Date(),
 });
+
 const loaded = ref(true);
 </script>

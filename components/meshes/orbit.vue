@@ -8,28 +8,24 @@
 
 <script lang="ts" setup>
 import { Line2 } from "@tresjs/cientos";
-import { useTexture } from "@tresjs/core";
 import { Color, type Vector3 } from "three";
-import { computed, ref } from "vue";
-import earthTexture from "~/assets/textures/8081_earthmap10k.jpg";
+import { type ComputedRef, computed, ref } from "vue";
 import { Earth } from "~/classes/bodies/earth";
 import { ISS } from "~/classes/bodies/iss";
 import type { Orbit } from "~/classes/orbits";
-import { parameters, useIntervalFn } from "#imports";
+import { parameters, useIntervalFn, useNewBody } from "#imports";
 
 const parent = new Earth();
-const body = new ISS(parent);
-const orbit = body.getParameters().orbits?.[0] as Orbit;
+const body = useNewBody(new ISS(parent));
+const orbit: ComputedRef<Orbit> = computed(
+    () => body.value.getParameters().orbit,
+) as ComputedRef<Orbit>;
 
-const textures = await useTexture({
-    map: earthTexture,
-});
-
-const orbitResolution = 100;
+const orbitResolution = 1000;
 const points = computed(() => {
     const points: Vector3[] = [];
     for (let i = 0; i <= orbitResolution; i++) {
-        const position = orbit
+        const position = orbit.value
             .calculatePoints(i / orbitResolution)
             .multiplyScalar(parameters.physics.sizeScale);
         points.push(position);
@@ -39,9 +35,9 @@ const points = computed(() => {
 
 // milliseconds
 const animationDuration = computed(
-    () => (body.getParameters().orbitalPeriod * 1000) / parameters.time.scale,
+    () => (body.value.calculateOrbitalPeriod() * 1000) / parameters.time.scale,
 );
-const ratioShown = ref(0.5);
+const ratioShown = ref(1.0);
 const offset = ref(0);
 
 const finalPoints = computed(() => {

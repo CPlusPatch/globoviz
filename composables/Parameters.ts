@@ -4,7 +4,6 @@ import type { SimulationConfig } from "~/components/controls/sidebar.vue";
 const useParameters = (): Reactive<SimulationConfig> => {
     return reactive({
         physics: {
-            axialTilt: 23.5,
             ecefScale: 1e3,
             sizeScale: 1e-7,
         },

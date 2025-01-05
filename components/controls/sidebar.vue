@@ -4,30 +4,19 @@
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <BodySelector />
+                    <BodySelector v-model:selected-body="selectedBody" />
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarHeader>
 
         <SidebarContent>
             <Form>
+                <BodyEditor v-if="selectedBody" v-model:selected-body="selectedBody" />
                 <SidebarGroup>
                     <SidebarGroupLabel>Physics</SidebarGroupLabel>
                     <SidebarGroupContent class="px-2 space-y-4">
                         <FormField v-slot="{ componentField, value, setValue }" name="axialTilt"
                             v-model:model-value="parameters.physics.axialTilt">
-                            <FormItem>
-                                <FormLabel>Axial Tilt</FormLabel>
-                                <FormControl>
-                                    <Slider v-bind="componentField" :model-value="[parameters.physics.axialTilt]"
-                                        @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
-                                    <FormDescription class="flex justify-between gap-2">
-                                        <span>The angle of the body's axis relative to its orbit</span>
-                                        <span>{{ value }}&deg;</span>
-                                    </FormDescription>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
                             <FormField v-slot="{ componentField, value }" name="ecefScale"
                             v-model:model-value="parameters.physics.ecefScale">
                                 <FormItem>
@@ -119,6 +108,8 @@
 
 <script lang="ts" setup>
 import { Form } from "vee-validate";
+import { type Ref, ref } from "vue";
+import type { CelestialBody } from "~/classes/bodies";
 import {
     Sidebar,
     SidebarContent,
@@ -141,11 +132,14 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Slider } from "../ui/slider";
+import BodyEditor from "./body-editor.vue";
 import BodySelector from "./body-selector.vue";
 
 const currentTime = defineModel<Date>("current-time", {
     default: new Date(),
 });
+
+const selectedBody: Ref<CelestialBody | undefined> = ref(undefined);
 
 export interface SimulationConfig {
     physics: {

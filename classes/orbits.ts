@@ -1,9 +1,10 @@
 import { Vector3 } from "three";
+import { degToRad } from "three/src/math/MathUtils.js";
 import type { CelestialBody } from "./bodies";
 
 export interface OrbitParameters {
     /** Parent celestial body */
-    parent: CelestialBody;
+    parent: CelestialBody | null;
     /** Semi-major axis, in meters */
     semiMajorAxis: number;
     /** Eccentricity */
@@ -16,6 +17,8 @@ export interface OrbitParameters {
     argumentOfPeriapsis: number;
     /** True anomaly, in degrees */
     trueAnomaly: number;
+    /** Show animation in UI */
+    animate?: boolean;
 }
 
 /**
@@ -40,28 +43,23 @@ export class Orbit {
             argumentOfPeriapsis,
         } = this.parameters;
 
+        const loa = degToRad(longitudeOfAscendingNode);
+        const aop = degToRad(argumentOfPeriapsis);
+        const inc = degToRad(inclination);
+
         const trueAnomaly = 2 * Math.PI * i;
         const r =
             (semiMajorAxis * (1 - eccentricity ** 2)) /
             (1 + eccentricity * Math.cos(trueAnomaly));
         const x =
             r *
-            (Math.cos(longitudeOfAscendingNode) *
-                Math.cos(argumentOfPeriapsis + trueAnomaly) -
-                Math.sin(longitudeOfAscendingNode) *
-                    Math.sin(argumentOfPeriapsis + trueAnomaly) *
-                    Math.cos(inclination));
+            (Math.cos(loa) * Math.cos(aop + trueAnomaly) -
+                Math.sin(loa) * Math.sin(aop + trueAnomaly) * Math.cos(inc));
         const y =
             r *
-            (Math.sin(longitudeOfAscendingNode) *
-                Math.cos(argumentOfPeriapsis + trueAnomaly) +
-                Math.cos(longitudeOfAscendingNode) *
-                    Math.sin(argumentOfPeriapsis + trueAnomaly) *
-                    Math.cos(inclination));
-        const z =
-            r *
-            (Math.sin(argumentOfPeriapsis + trueAnomaly) *
-                Math.sin(inclination));
+            (Math.sin(loa) * Math.cos(aop + trueAnomaly) +
+                Math.cos(loa) * Math.sin(aop + trueAnomaly) * Math.cos(inc));
+        const z = r * (Math.sin(aop + trueAnomaly) * Math.sin(inc));
 
         return new Vector3(x, y, z);
     }

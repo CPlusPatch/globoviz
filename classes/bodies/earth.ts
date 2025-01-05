@@ -1,4 +1,6 @@
 import { CelestialBody } from ".";
+import { Orbit } from "../orbits";
+import { Sun } from "./sun";
 
 export class Earth extends CelestialBody {
     constructor() {
@@ -6,10 +8,17 @@ export class Earth extends CelestialBody {
             radius: 6.371e6,
             mass: 5.972e24,
             rotationPeriod: 24 * 60 * 60,
-            orbitalPeriod: 365.25 * 24 * 60 * 60,
             axialTilt: 23.5,
             name: "Earth",
-            orbits: null,
+            orbit: new Orbit({
+                parent: new Sun(),
+                semiMajorAxis: 1.496e11,
+                argumentOfPeriapsis: 288.064,
+                eccentricity: 0.0167,
+                inclination: 0,
+                longitudeOfAscendingNode: 174.873,
+                trueAnomaly: 358.617,
+            }),
             atmosphere: {
                 density: 1.225,
                 fullHeight: 100e3,
@@ -17,7 +26,7 @@ export class Earth extends CelestialBody {
                 raighleighCoefficient: 0.0025,
                 mieCoefficient: 0.001,
             },
-            g: -0.95,
+            g: 9.81,
         });
     }
 }

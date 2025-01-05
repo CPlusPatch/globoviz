@@ -22,8 +22,6 @@ export interface CelestialBodyParameters {
     mass: number;
     /** Rotation period, in seconds */
     rotationPeriod: number;
-    /** Orbital period, in seconds */
-    orbitalPeriod: number;
     /** Axial tilt, in degrees */
     axialTilt: number;
     /** Common designation */
@@ -31,7 +29,7 @@ export interface CelestialBodyParameters {
     /** Atmosphere */
     atmosphere: Atmosphere | null;
     /** Orbits */
-    orbits: Orbit[] | null;
+    orbit: Orbit;
     /** g, in m/s² */
     g: number;
 }
@@ -40,7 +38,7 @@ export interface CelestialBodyParameters {
  * Celestial body
  */
 export class CelestialBody {
-    constructor(private parameters: CelestialBodyParameters) {}
+    constructor(protected parameters: CelestialBodyParameters) {}
 
     getParameters(): CelestialBodyParameters {
         return this.parameters;
@@ -90,5 +88,28 @@ export class CelestialBody {
             position: new Vector3(0, 0, 0),
             rotation: new Euler(pitchRotation, yawRotation, 0),
         };
+    }
+
+    /**
+     * Calculate orbital period of the body, in seconds, based on its orbit
+     *
+     * Uses Kepler's third law of planetary motion
+     * @returns {number} Orbital period in seconds
+     */
+    public calculateOrbitalPeriod(): number {
+        const { semiMajorAxis } = this.parameters.orbit.getParameters();
+        const parent = this.parameters.orbit.getParameters().parent;
+
+        if (!parent) {
+            throw new Error("Can't calculate orbital period without a parent");
+        }
+
+        const G = 6.6743e-11;
+
+        return (
+            2 *
+            Math.PI *
+            Math.sqrt(semiMajorAxis ** 3 / (G * parent.getParameters().mass))
+        );
     }
 }
