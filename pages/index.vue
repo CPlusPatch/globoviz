@@ -1,9 +1,9 @@
 <template>
     <SidebarProvider class="![--sidebar-width:20rem]">
         <SidebarInset>
-            <GlobeVisualisation :config="config" v-model:current-time="date" />
+            <GlobeVisualisation v-model:current-time="date" />
         </SidebarInset>
-        <Sidebar @update-config="c => config = c" v-model:current-time="date" />
+        <Sidebar v-model:current-time="date" />
     </SidebarProvider>
 </template>
 

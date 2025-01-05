@@ -15,11 +15,11 @@
                     <SidebarGroupLabel>Physics</SidebarGroupLabel>
                     <SidebarGroupContent class="px-2 space-y-4">
                         <FormField v-slot="{ componentField, value, setValue }" name="axialTilt"
-                            v-model:model-value="config.physics.axialTilt">
+                            v-model:model-value="parameters.physics.axialTilt">
                             <FormItem>
                                 <FormLabel>Axial Tilt</FormLabel>
                                 <FormControl>
-                                    <Slider v-bind="componentField" :model-value="[config.physics.axialTilt]"
+                                    <Slider v-bind="componentField" :model-value="[parameters.physics.axialTilt]"
                                         @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                                     <FormDescription class="flex justify-between gap-2">
                                         <span>The angle of the body's axis relative to its orbit</span>
@@ -28,6 +28,36 @@
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
+                            <FormField v-slot="{ componentField, value }" name="ecefScale"
+                            v-model:model-value="parameters.physics.ecefScale">
+                                <FormItem>
+                                    <FormLabel>Distance Scale</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" v-bind="componentField" :min="-100_000_000"
+                                            :max="100_000_000" />
+                                        <FormDescription class="flex justify-between gap-2">
+                                            <span></span>
+                                            <span>{{ value }}x</span>
+                                        </FormDescription>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            </FormField>
+                            <FormField v-slot="{ componentField, value }" name="sizeScale"
+                            v-model:model-value="parameters.physics.sizeScale">
+                                <FormItem>
+                                    <FormLabel>Size Scale</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" v-bind="componentField" :min="1e-10"
+                                            :max="1e-3" :step="1e-6" />
+                                        <FormDescription class="flex justify-between gap-2">
+                                            <span></span>
+                                            <span>{{ value }}x</span>
+                                        </FormDescription>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            </FormField>
                         </FormField>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -35,7 +65,7 @@
                     <SidebarGroupLabel>Time</SidebarGroupLabel>
                     <SidebarGroupContent class="px-2 space-y-4">
                         <FormField v-slot="{ componentField, value }" name="scale"
-                            v-model:model-value="config.time.scale">
+                            v-model:model-value="parameters.time.scale">
                             <FormItem>
                                 <FormLabel>Time Scale</FormLabel>
                                 <FormControl>
@@ -50,7 +80,7 @@
                             </FormItem>
                         </FormField>
                         <FormField v-slot="{ componentField, value }" name="hoursInDay"
-                            v-model:model-value="config.time.hoursInDay">
+                            v-model:model-value="parameters.time.hoursInDay">
                             <FormItem>
                                 <FormLabel>Day Length</FormLabel>
                                 <FormControl>
@@ -64,7 +94,7 @@
                             </FormItem>
                         </FormField>
                         <FormField v-slot="{ componentField, value }" name="daysInYear"
-                            v-model:model-value="config.time.daysInYear">
+                            v-model:model-value="parameters.time.daysInYear">
                             <FormItem>
                                 <FormLabel>Year Length</FormLabel>
                                 <FormControl>
@@ -89,8 +119,6 @@
 
 <script lang="ts" setup>
 import { Form } from "vee-validate";
-import { reactive } from "vue";
-import { z } from "zod";
 import {
     Sidebar,
     SidebarContent,
@@ -102,6 +130,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "~/components/ui/sidebar";
+import { parameters } from "#imports";
 import { DatetimePicker } from "../ui/datetime-picker";
 import {
     FormControl,
@@ -118,55 +147,11 @@ const currentTime = defineModel<Date>("current-time", {
     default: new Date(),
 });
 
-const simConfigSchema = z.object({
-    axialTilt: z
-        .number()
-        .min(-180, {
-            message: "Axial tilt must be at least -180",
-        })
-        .max(180, {
-            message: "Axial tilt must be at most 180",
-        })
-        .step(0.1)
-        .default(23.5)
-        .describe("Axial tilt"),
-    scale: z
-        .number()
-        .int()
-        .min(1, {
-            message: "Time scale must be at least 1",
-        })
-        .max(10_000_000, {
-            message: "Time scale must be at most 10,000,000",
-        })
-        .step(1)
-        .default(1)
-        .describe("Time scale"),
-    hoursInDay: z
-        .number()
-        .min(1, {
-            message: "Day length must be at least 1",
-        })
-        .max(100, {
-            message: "Day length must be at most 1000",
-        })
-        .default(24)
-        .describe("Day length"),
-    daysInYear: z
-        .number()
-        .min(1, {
-            message: "Year length must be at least 1",
-        })
-        .max(1000, {
-            message: "Year length must be at most 1000",
-        })
-        .default(365.256366)
-        .describe("Year length"),
-});
-
 export interface SimulationConfig {
     physics: {
         axialTilt: number;
+        ecefScale: number;
+        sizeScale: number;
     };
     time: {
         scale: number;
@@ -174,22 +159,4 @@ export interface SimulationConfig {
         daysInYear: number;
     };
 }
-
-const defaultValues = simConfigSchema.parse({});
-const config = reactive<SimulationConfig>({
-    physics: {
-        axialTilt: defaultValues.axialTilt,
-    },
-    time: {
-        scale: defaultValues.scale,
-        hoursInDay: defaultValues.hoursInDay,
-        daysInYear: defaultValues.daysInYear,
-    },
-});
-
-const emit = defineEmits<{
-    updateConfig: [config: SimulationConfig];
-}>();
-
-emit("updateConfig", config);
 </script>
