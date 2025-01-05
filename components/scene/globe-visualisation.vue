@@ -33,7 +33,6 @@
 
 <script lang="ts" setup>
 import { BloomPmndrs, EffectComposerPmndrs } from "@tresjs/post-processing";
-import { ref } from "vue";
 import { TresCanvas } from "#components";
 import Earth from "../meshes/earth.vue";
 import Stars from "../meshes/stars.vue";
