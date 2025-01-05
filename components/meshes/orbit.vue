@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import { Line2 } from "@tresjs/cientos";
 import { Color, type Vector3 } from "three";
-import { type ComputedRef, computed, ref } from "vue";
+import { type ComputedRef, computed, ref, watch } from "vue";
 import { Earth } from "~/classes/bodies/earth";
 import { ISS } from "~/classes/bodies/iss";
 import type { Orbit } from "~/classes/orbits";

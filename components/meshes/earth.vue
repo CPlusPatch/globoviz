@@ -1,23 +1,21 @@
 <template>
-    <TresGroup>
-        <TresMesh :position="position" :receive-shadow="true"
-            :rotation="rotation">
+    <TresGroup :rotation="rotation">
+        <TresMesh :position="position" :receive-shadow="true">
             <TresSphereGeometry :args="[radius, 32, 32]" />
             <TresMeshLambertMaterial :map="textures.map" />
         </TresMesh>
         <!-- Earth axis -->
         <Line2
-            :points="[[0, -1.5 * 1e7 * parameters.physics.sizeScale * radius, 0], [0, 1.5 * 1e7 * parameters.physics.sizeScale * radius, 0]]"
-            :rotation="rotation" :line-width="5"
+            :points="[[0, -1.5 * 1e7 * parameters.physics.sizeScale * radius, 0], [0, 1.5 * 1e7 * parameters.physics.sizeScale * radius, 0]]" :line-width="5"
             :color="new Color('green')" />
+
+            <Suspense>
+                <OrbitVue />
+            </Suspense>
+        </TresGroup>
         <TresDirectionalLight :position="lightPosition" :intensity="1" :look-at="position">
             <Lensflare :scale="1" :color="new Color('orange')" />
         </TresDirectionalLight>
-
-        <Suspense>
-            <OrbitVue :rotation="rotation" />
-        </Suspense>
-    </TresGroup>
 </template>
 
 <script lang="ts" setup>
