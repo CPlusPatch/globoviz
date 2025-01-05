@@ -38,22 +38,7 @@ export interface CelestialBodyParameters {
  * Celestial body
  */
 export class CelestialBody {
-    constructor(protected parameters: CelestialBodyParameters) {}
-
-    getParameters(): CelestialBodyParameters {
-        return this.parameters;
-    }
-
-    setParameters(parameters: CelestialBodyParameters): void {
-        this.parameters = parameters;
-    }
-
-    setParameter<K extends keyof CelestialBodyParameters>(
-        key: K,
-        value: CelestialBodyParameters[K],
-    ): void {
-        this.parameters[key] = value;
-    }
+    constructor(public parameters: CelestialBodyParameters) {}
 
     /**
      * Calculate the rotation of the body for a given date
@@ -97,8 +82,8 @@ export class CelestialBody {
      * @returns {number} Orbital period in seconds
      */
     public calculateOrbitalPeriod(): number {
-        const { semiMajorAxis } = this.parameters.orbit.getParameters();
-        const parent = this.parameters.orbit.getParameters().parent;
+        const { semiMajorAxis } = this.parameters.orbit.parameters;
+        const parent = this.parameters.orbit.parameters.parent;
 
         if (!parent) {
             throw new Error("Can't calculate orbital period without a parent");
@@ -109,7 +94,7 @@ export class CelestialBody {
         return (
             2 *
             Math.PI *
-            Math.sqrt(semiMajorAxis ** 3 / (G * parent.getParameters().mass))
+            Math.sqrt(semiMajorAxis ** 3 / (G * parent.parameters.mass))
         );
     }
 }

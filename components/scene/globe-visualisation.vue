@@ -19,8 +19,6 @@
                 <Stars />
             </Suspense>
 
-            <!-- <TresAmbientLight :intensity="1" /> -->
-
             <EffectComposerPmndrs>
                 <BloomPmndrs :radius="0.85" :intensity="1.0" :luminance-threshold="0.1" :luminance-smoothing="0.3"
                     mipmap-blur />
@@ -28,7 +26,7 @@
         </TresCanvas>
 
         <Transition leave-active-class="duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">
-            <Loading v-if="!loaded" />
+            <Loading v-if="!hasFinishLoading" />
         </Transition>
     </div>
 </template>
@@ -42,10 +40,11 @@ import Stars from "../meshes/stars.vue";
 import Sun from "../meshes/sun.vue";
 import { SidebarTrigger } from "../ui/sidebar";
 import Loading from "./loading.vue";
+import { useProgress } from "@tresjs/cientos";
 
 const date = defineModel<Date>("currentTime", {
     default: new Date(),
 });
 
-const loaded = ref(true);
+const { hasFinishLoading, progress, items } = await useProgress();
 </script>

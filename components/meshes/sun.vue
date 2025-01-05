@@ -25,7 +25,7 @@ const position = computed(() =>
     ),
 );
 const radius = computed(
-    () => body.getParameters().radius * parameters.physics.sizeScale,
+    () => body.parameters.radius * parameters.physics.sizeScale,
 );
 
 const textures = await useTexture({

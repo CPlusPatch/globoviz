@@ -256,18 +256,10 @@ export class GlobeVisualization {
 
     public updateConfig(config: SimulationConfig): void {
         this.simulationConfig = config;
-        this.earth.body.setParameter(
-            "axialTilt",
-            this.simulationConfig.physics.axialTilt,
-        );
-        this.earth.body.setParameter(
-            "rotationPeriod",
-            this.simulationConfig.time.hoursInDay * 60 * 60,
-        );
-        this.earth.body.setParameter(
-            "orbitalPeriod",
-            this.simulationConfig.time.daysInYear * 24 * 60 * 60,
-        );
+        this.earth.body.parameters.axialTilt =
+            this.simulationConfig.physics.axialTilt;
+        this.earth.body.parameters.rotationPeriod =
+            this.simulationConfig.time.hoursInDay * 60 * 60;
     }
 
     /**

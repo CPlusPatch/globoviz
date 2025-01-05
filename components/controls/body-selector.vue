@@ -9,15 +9,15 @@
                 </div>
                 <div class="flex flex-col gap-0.5 leading-none">
                     <span class="font-semibold">Celestial Body</span>
-                    <span>{{ selectedBody?.getParameters().name ?? "None selected" }}</span>
+                    <span>{{ selectedBody?.parameters.name ?? "None selected" }}</span>
                 </div>
                 <ChevronsUpDown class="ml-auto" />
             </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent  class="w-[--radix-dropdown-menu-trigger-width]" align="start">
-            <DropdownMenuItem v-for="body in bodies" :key="body.getParameters().name" @click="selectedBody = body">
+            <DropdownMenuItem v-for="body in bodies" :key="body.parameters.name" @click="selectedBody = body">
                 <component :is="Globe" class="size-4 mr-2" />
-                {{ body.getParameters().name }}
+                {{ body.parameters.name }}
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>

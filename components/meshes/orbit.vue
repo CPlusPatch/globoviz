@@ -18,7 +18,7 @@ import { parameters, useIntervalFn, useNewBody } from "#imports";
 const parent = new Earth();
 const body = useNewBody(new ISS(parent));
 const orbit: ComputedRef<Orbit> = computed(
-    () => body.value.getParameters().orbit,
+    () => body.value.parameters.orbit,
 ) as ComputedRef<Orbit>;
 
 const orbitResolution = 1000;

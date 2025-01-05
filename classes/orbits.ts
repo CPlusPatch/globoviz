@@ -25,7 +25,7 @@ export interface OrbitParameters {
  * Utility class for calculating orbital parameters
  */
 export class Orbit {
-    constructor(private parameters: OrbitParameters) {}
+    constructor(public parameters: OrbitParameters) {}
 
     /**
      * Calculate every point of the orbit around the parent body, relative to the parent body's center
@@ -62,20 +62,5 @@ export class Orbit {
         const z = r * (Math.sin(aop + trueAnomaly) * Math.sin(inc));
 
         return new Vector3(x, y, z);
-    }
-
-    getParameters(): OrbitParameters {
-        return this.parameters;
-    }
-
-    setParameters(parameters: OrbitParameters): void {
-        this.parameters = parameters;
-    }
-
-    setParameter<K extends keyof OrbitParameters>(
-        key: K,
-        value: OrbitParameters[K],
-    ): void {
-        this.parameters[key] = value;
     }
 }

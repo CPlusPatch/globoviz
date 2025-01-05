@@ -129,22 +129,22 @@ const body = defineModel<CelestialBody>("selectedBody", {
 });
 
 // Workaround the fact that orbit and parent are classes, not plain objects, which means they can't be watched
-const parameters = reactive({ ...body.value.getParameters(), orbit: null });
+const parameters = reactive({ ...body.value.parameters, orbit: null });
 const orbitParameters = reactive({
-    ...body.value.getParameters().orbit.getParameters(),
+    ...body.value.parameters.orbit.parameters,
     parent: null,
 });
 watch(parameters, (np) => {
-    body.value.setParameters({
+    body.value.parameters = {
         ...np,
-        orbit: body.value.getParameters().orbit,
-    });
+        orbit: body.value.parameters.orbit,
+    };
 });
 
 watch(orbitParameters, (np) => {
-    body.value.getParameters().orbit.setParameters({
+    body.value.parameters.orbit.parameters = {
         ...np,
-        parent: body.value.getParameters().orbit.getParameters().parent,
-    });
+        parent: body.value.parameters.orbit.parameters.parent,
+    };
 });
 </script>

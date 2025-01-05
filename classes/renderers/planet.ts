@@ -28,7 +28,7 @@ export class PlanetRenderer extends Group {
     ) {
         super();
 
-        const { name, radius, atmosphere } = this.body.getParameters();
+        const { name, radius, atmosphere } = this.body.parameters;
 
         if (!atmosphere) {
             throw new Error("Atmosphere is required for a planet");

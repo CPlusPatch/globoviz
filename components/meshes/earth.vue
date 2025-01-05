@@ -40,7 +40,7 @@ const body = useNewBody(new Earth());
 
 const position = computed(() => new Vector3(0, 0, 0));
 const radius = computed(
-    () => body.value.getParameters().radius * parameters.physics.sizeScale,
+    () => body.value.parameters.radius * parameters.physics.sizeScale,
 );
 
 // Light should be positioned between the sun and the earth, at a distance of 2*radius of the earth from the earth
