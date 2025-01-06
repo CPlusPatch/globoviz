@@ -17,7 +17,7 @@ export class Earth extends Planet {
                 eccentricity: 0.0167,
                 inclination: 0,
                 longitudeOfAscendingNode: 174.873,
-                trueAnomaly: 358.617,
+                meanAnomaly: 358.617,
             },
             atmosphere: {
                 density: 1.225,

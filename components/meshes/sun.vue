@@ -13,11 +13,13 @@ import { Color, Vector3 } from "three";
 import { computed } from "vue";
 import ecef from "~/assets/data/ecef.json";
 import sunTexture from "~/assets/textures/2k_sun.jpg";
-import { Sun } from "~/classes/bodies/planets/sun";
+import type { Sun } from "~/classes/bodies/planets/sun";
 import type { ECEF } from "~/classes/renderer";
 import { parameters } from "#imports";
 
-const body = new Sun();
+const { sun } = defineProps<{
+    sun: Sun;
+}>();
 
 const position = computed(() =>
     new Vector3(...(ecef as ECEF).sun[0]).multiplyScalar(
@@ -25,7 +27,7 @@ const position = computed(() =>
     ),
 );
 const radius = computed(
-    () => body.parameters.radius * parameters.physics.sizeScale,
+    () => sun.parameters.radius * parameters.physics.sizeScale,
 );
 
 const textures = await useTexture({

@@ -15,8 +15,8 @@ export interface OrbitParameters {
     longitudeOfAscendingNode: number;
     /** Argument of periapsis, in degrees */
     argumentOfPeriapsis: number;
-    /** True anomaly, in degrees */
-    trueAnomaly: number;
+    /** Mean anomaly, in degrees */
+    meanAnomaly: number;
     /** Show animation in UI */
     animate?: boolean;
 }

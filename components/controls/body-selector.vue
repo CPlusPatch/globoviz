@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { ChevronsUpDown, Globe, SatelliteIcon } from "lucide-vue-next";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
 import { Planet } from "~/classes/bodies/planet";
 import { Satellite } from "~/classes/bodies/satellite";

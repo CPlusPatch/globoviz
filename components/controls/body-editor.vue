@@ -135,6 +135,7 @@ const parameters = reactive({
         parent: null,
     },
 });
+
 watch(parameters, (np) => {
     body.value.parameters = {
         ...np,
@@ -143,5 +144,15 @@ watch(parameters, (np) => {
             parent: body.value.parameters.orbit.parent,
         },
     };
+});
+
+watch(body, (nb) => {
+    Object.assign(parameters, {
+        ...nb.parameters,
+        orbit: {
+            ...nb.parameters.orbit,
+            parent: null,
+        },
+    });
 });
 </script>

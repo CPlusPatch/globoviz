@@ -11,11 +11,11 @@
             <OrbitControls />
 
             <Suspense>
-                <Sun />
+                <SunMesh :sun="sun" />
             </Suspense>
 
-            <Suspense>
-                <Earth />
+            <Suspense v-for="planet in planets" :key="planet.parameters.name">
+                <PlanetMesh :planet="planet" :sats="sats.filter((sat) => sat.parameters.orbit.parent === planet)" />
             </Suspense>
 
             <Suspense>
@@ -37,10 +37,14 @@
 <script lang="ts" setup>
 import { useProgress } from "@tresjs/cientos";
 import { BloomPmndrs, EffectComposerPmndrs } from "@tresjs/post-processing";
+import { Planet } from "~/classes/bodies/planet";
+import { Sun } from "~/classes/bodies/planets/sun";
+import { Satellite } from "~/classes/bodies/satellite";
+import { solarSystem } from "~/classes/bodies/solarsystem";
 import { TresCanvas } from "#components";
-import Earth from "../meshes/earth.vue";
+import PlanetMesh from "../meshes/planet.vue";
 import Stars from "../meshes/stars.vue";
-import Sun from "../meshes/sun.vue";
+import SunMesh from "../meshes/sun.vue";
 import { SidebarTrigger } from "../ui/sidebar";
 import Footer from "./footer.vue";
 import Loading from "./loading.vue";
@@ -49,5 +53,11 @@ const date = defineModel<Date>("currentTime", {
     default: new Date(),
 });
 
-const { hasFinishLoading, progress, items } = await useProgress();
+const sun = solarSystem.find((body) => body instanceof Sun) as Sun;
+const planets = solarSystem.filter(
+    (body) => body instanceof Planet && !(body instanceof Sun),
+);
+const sats = solarSystem.filter((body) => body instanceof Satellite);
+
+const { hasFinishLoading } = await useProgress();
 </script>

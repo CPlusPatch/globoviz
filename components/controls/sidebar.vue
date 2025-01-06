@@ -131,7 +131,6 @@ import {
     FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Slider } from "../ui/slider";
 import BodyEditor from "./body-editor.vue";
 import BodySelector from "./body-selector.vue";
 

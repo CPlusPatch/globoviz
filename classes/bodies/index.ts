@@ -97,8 +97,6 @@ export class CelestialBody {
     public calculateOrbitalPeriod(): number {
         const { semiMajorAxis, parent } = this.orbit.parameters;
 
-        console.log(semiMajorAxis, parent);
-
         if (!parent) {
             throw new Error("Can't calculate orbital period without a parent");
         }

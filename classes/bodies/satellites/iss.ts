@@ -18,7 +18,7 @@ export class Iss extends Satellite {
                 parent,
                 longitudeOfAscendingNode: 32.7386,
                 argumentOfPeriapsis: 48.6291,
-                trueAnomaly: 97.2059,
+                meanAnomaly: 97.2059,
             },
         });
     }

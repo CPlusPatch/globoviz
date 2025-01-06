@@ -16,7 +16,7 @@ export class Sun extends CelestialBody {
                 longitudeOfAscendingNode: 0,
                 parent: null,
                 semiMajorAxis: 0,
-                trueAnomaly: 0,
+                meanAnomaly: 0,
             },
             name: "Sun",
             atmosphere: null,
