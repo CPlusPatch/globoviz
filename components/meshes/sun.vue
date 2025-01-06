@@ -15,11 +15,13 @@ import ecef from "~/assets/data/ecef.json";
 import sunTexture from "~/assets/textures/2k_sun.jpg";
 import type { Sun } from "~/classes/bodies/planets/sun";
 import type { ECEF } from "~/classes/renderer";
-import { parameters } from "#imports";
+import { parameters, useNewBody } from "#imports";
 
 const { sun } = defineProps<{
     sun: Sun;
 }>();
+
+useNewBody(sun);
 
 const position = computed(() =>
     new Vector3(...(ecef as ECEF).sun[0]).multiplyScalar(

@@ -19,8 +19,8 @@
             </FormField>
         </SidebarGroupContent>
     </SidebarGroup>
-    <Separator />
-    <SidebarGroup>
+    <Separator v-if="body.orbit.parameters.parent" />
+    <SidebarGroup v-if="body.orbit.parameters.parent">
         <SidebarGroupLabel>Orbit</SidebarGroupLabel>
         <SidebarGroupContent class="px-2 space-y-4">
             <FormField v-if="parentRadius" v-slot="{ componentField, value, setValue }" name="semiMajorAxis"
@@ -132,6 +132,7 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
+import { Satellite } from "~/classes/bodies/satellite";
 import {
     FormDescription,
     FormField,

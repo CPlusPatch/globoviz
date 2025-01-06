@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
-import { ChevronUp } from "lucide-vue-next";
 import {
-    SelectScrollUpButton,
-    type SelectScrollUpButtonProps,
+    DialogDescription,
+    type DialogDescriptionProps,
     useForwardProps,
 } from "radix-vue";
 import { type HTMLAttributes, computed } from "vue";
 
 const props = defineProps<
-    SelectScrollUpButtonProps & { class?: HTMLAttributes["class"] }
+    DialogDescriptionProps & { class?: HTMLAttributes["class"] }
 >();
 
 const delegatedProps = computed(() => {
@@ -22,9 +21,10 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <SelectScrollUpButton v-bind="forwardedProps" :class="cn('flex cursor-default items-center justify-center py-1', props.class)">
-    <slot>
-      <ChevronUp class="size-4" />
-    </slot>
-  </SelectScrollUpButton>
+  <DialogDescription
+    v-bind="forwardedProps"
+    :class="cn('text-sm text-muted-foreground', props.class)"
+  >
+    <slot />
+  </DialogDescription>
 </template>
