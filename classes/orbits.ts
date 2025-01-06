@@ -63,4 +63,16 @@ export class Orbit {
 
         return new Vector3(x, y, z);
     }
+
+    /**
+     * Calculates the apoapsis and periapsis of the orbit
+     * @returns [apoapsis, periapsis]
+     */
+    public calculateApoapsisPeriapsis(): [number, number] {
+        const { semiMajorAxis, eccentricity } = this.parameters;
+        return [
+            semiMajorAxis * (1 + eccentricity),
+            semiMajorAxis * (1 - eccentricity),
+        ];
+    }
 }

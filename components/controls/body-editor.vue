@@ -11,7 +11,7 @@
                             @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
-                        <span>The angle of the body's axis relative to its orbit</span>
+                        <span>Angle of the body's axis relative to its orbit</span>
                         <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
@@ -23,16 +23,40 @@
     <SidebarGroup>
         <SidebarGroupLabel>Orbit</SidebarGroupLabel>
         <SidebarGroupContent class="px-2 space-y-4">
-            <FormField v-slot="{ componentField, value }" name="semiMajorAxis"
+            <FormField v-if="parentRadius" v-slot="{ componentField, value, setValue }" name="semiMajorAxis"
                 v-model:model-value="parameters.orbit.semiMajorAxis">
                 <FormItem>
                     <FormLabel>Semi-Major Axis</FormLabel>
                     <FormControl>
-                        <Input type="number" v-bind="componentField" :min="-100_000_000" :max="100_000_000" />
+                        <Slider v-bind="componentField" :model-value="[value]"
+                            @update:model-value="m => setValue(m?.[0])" :max="parentRadius * 10" :min="0" :step="
+                            parentRadius / 100" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
-                        <span></span>
+                        <span>Average distance from the parent body</span>
                         <span>{{ formatDistance(value) }}</span>
+                    </FormDescription>
+                    <FormMessage />
+                </FormItem>
+            </FormField>
+            <Separator v-if="parentRadius" />
+            <FormField v-if="parentRadius" v-slot="{ value }" name="apoapsis" v-model:model-value="apoapsis">
+                <FormItem>
+                    <FormLabel>Apoapsis</FormLabel>
+                    <FormDescription class="flex justify-between gap-2">
+                        <span>Highest point in the orbit</span>
+                        <span>{{ formatDistance(value - parentRadius) }}</span>
+                    </FormDescription>
+                    <FormMessage />
+                </FormItem>
+            </FormField>
+            <Separator v-if="parentRadius" />
+            <FormField v-if="parentRadius" v-slot="{ value }" name="periapsis" v-model:model-value="periapsis">
+                <FormItem>
+                    <FormLabel>Periapsis</FormLabel>
+                    <FormDescription class="flex justify-between gap-2">
+                        <span>Lowest point in the orbit</span>
+                        <span>{{ formatDistance(value - parentRadius) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -47,7 +71,7 @@
                             @update:model-value="m => setValue(m?.[0])" :max="1" :min="0" :step="0.01" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
-                        <span>The shape of the orbit</span>
+                        <span>Shape of the orbit</span>
                         <span>{{ formatScalar(value) }}</span>
                     </FormDescription>
                     <FormMessage />
@@ -63,7 +87,7 @@
                             @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
-                        <span>The angle of the orbit relative to the equator</span>
+                        <span>Angle of the orbit relative to the equator</span>
                         <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
@@ -79,7 +103,7 @@
                             @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
-                        <span>The angle of the orbit's ascending node relative to the vernal equinox</span>
+                        <span>Angle of the orbit's ascending node relative to the vernal equinox</span>
                         <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
@@ -106,7 +130,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
 import {
     FormDescription,
@@ -175,4 +199,18 @@ watch(body, (nb) => {
         },
     });
 });
+
+const apoapsis = computed(
+    () => body.value.orbit.calculateApoapsisPeriapsis()[0],
+);
+const periapsis = computed(
+    () => body.value.orbit.calculateApoapsisPeriapsis()[1],
+);
+
+const parentRadius = computed(
+    () => body.value.orbit.parameters.parent?.parameters.radius,
+);
+
+const calculateSemiMajorAxis = (apoapsis: number, periapsis: number) =>
+    (apoapsis + periapsis) / 2;
 </script>
