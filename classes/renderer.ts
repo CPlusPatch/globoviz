@@ -13,7 +13,7 @@ import WebGL from "three/addons/capabilities/WebGL.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import ecef from "~/assets/data/ecef.json";
 import type { SimulationConfig } from "~/components/controls/sidebar.vue";
-import { Earth } from "./bodies/earth";
+import { Earth } from "./bodies/planets/earth";
 import { EarthRenderer } from "./renderers/earth";
 import { StarsRenderer } from "./renderers/stars";
 import { SunRenderer } from "./renderers/sun";

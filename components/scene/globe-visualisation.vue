@@ -35,15 +35,15 @@
 </template>
 
 <script lang="ts" setup>
+import { useProgress } from "@tresjs/cientos";
 import { BloomPmndrs, EffectComposerPmndrs } from "@tresjs/post-processing";
 import { TresCanvas } from "#components";
 import Earth from "../meshes/earth.vue";
 import Stars from "../meshes/stars.vue";
 import Sun from "../meshes/sun.vue";
 import { SidebarTrigger } from "../ui/sidebar";
-import Loading from "./loading.vue";
-import { useProgress } from "@tresjs/cientos";
 import Footer from "./footer.vue";
+import Loading from "./loading.vue";
 
 const date = defineModel<Date>("currentTime", {
     default: new Date(),

@@ -24,7 +24,7 @@
         <SidebarGroupLabel>Orbit</SidebarGroupLabel>
         <SidebarGroupContent class="px-2 space-y-4">
             <FormField v-slot="{ componentField, value }" name="semiMajorAxis"
-                v-model:model-value="orbitParameters.semiMajorAxis">
+                v-model:model-value="parameters.orbit.semiMajorAxis">
                 <FormItem>
                     <FormLabel>Semi-Major Axis</FormLabel>
                     <FormControl>
@@ -39,11 +39,11 @@
             </FormField>
             <Separator />
             <FormField v-slot="{ componentField, value, setValue }" name="eccentricity"
-                v-model:model-value="orbitParameters.eccentricity">
+                v-model:model-value="parameters.orbit.eccentricity">
                 <FormItem>
                     <FormLabel>Eccentricity</FormLabel>
                     <FormControl>
-                        <Slider v-bind="componentField" :model-value="[orbitParameters.eccentricity]"
+                        <Slider v-bind="componentField" :model-value="[parameters.orbit.eccentricity]"
                             @update:model-value="m => setValue(m?.[0])" :max="1" :min="0" :step="0.01" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
@@ -55,11 +55,11 @@
             </FormField>
             <Separator />
             <FormField v-slot="{ componentField, value, setValue }" name="inclination"
-                v-model:model-value="orbitParameters.inclination">
+                v-model:model-value="parameters.orbit.inclination">
                 <FormItem>
                     <FormLabel>Inclination</FormLabel>
                     <FormControl>
-                        <Slider v-bind="componentField" :model-value="[orbitParameters.inclination]"
+                        <Slider v-bind="componentField" :model-value="[parameters.orbit.inclination]"
                             @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
@@ -71,11 +71,11 @@
             </FormField>
             <Separator />
             <FormField v-slot="{ componentField, value, setValue }" name="longitudeOfAscendingNode"
-                v-model:model-value="orbitParameters.longitudeOfAscendingNode">
+                v-model:model-value="parameters.orbit.longitudeOfAscendingNode">
                 <FormItem>
                     <FormLabel>Longitude of Ascending Node</FormLabel>
                     <FormControl>
-                        <Slider v-bind="componentField" :model-value="[orbitParameters.longitudeOfAscendingNode]"
+                        <Slider v-bind="componentField" :model-value="[parameters.orbit.longitudeOfAscendingNode]"
                             @update:model-value="m => setValue(m?.[0])" :max="180" :min="-180" :step="1" />
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
@@ -106,7 +106,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Switch } from "@/components/ui/switch";
 import { reactive, watch } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
 import {
@@ -128,23 +127,21 @@ const body = defineModel<CelestialBody>("selectedBody", {
     required: true,
 });
 
-// Workaround the fact that orbit and parent are classes, not plain objects, which means they can't be watched
-const parameters = reactive({ ...body.value.parameters, orbit: null });
-const orbitParameters = reactive({
-    ...body.value.parameters.orbit.parameters,
-    parent: null,
+// Workaround the fact that parent is a class, not a plain object, which means it can't be watched
+const parameters = reactive({
+    ...body.value.parameters,
+    orbit: {
+        ...body.value.parameters.orbit,
+        parent: null,
+    },
 });
 watch(parameters, (np) => {
     body.value.parameters = {
         ...np,
-        orbit: body.value.parameters.orbit,
-    };
-});
-
-watch(orbitParameters, (np) => {
-    body.value.parameters.orbit.parameters = {
-        ...np,
-        parent: body.value.parameters.orbit.parameters.parent,
+        orbit: {
+            ...np.orbit,
+            parent: body.value.parameters.orbit.parent,
+        },
     };
 });
 </script>

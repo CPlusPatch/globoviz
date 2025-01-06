@@ -1,5 +1,5 @@
-import { CelestialBody } from ".";
-import { Orbit } from "../orbits";
+import { CelestialBody } from "..";
+import { Orbit } from "../../orbits";
 
 export class Sun extends CelestialBody {
     constructor() {
@@ -9,7 +9,7 @@ export class Sun extends CelestialBody {
             axialTilt: 0,
             g: 274,
             rotationPeriod: 25.05,
-            orbit: new Orbit({
+            orbit: {
                 argumentOfPeriapsis: 0,
                 eccentricity: 0,
                 inclination: 0,
@@ -17,7 +17,7 @@ export class Sun extends CelestialBody {
                 parent: null,
                 semiMajorAxis: 0,
                 trueAnomaly: 0,
-            }),
+            },
             name: "Sun",
             atmosphere: null,
         });

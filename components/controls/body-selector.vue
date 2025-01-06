@@ -24,9 +24,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ChevronsUpDown, Globe, Satellite } from "lucide-vue-next";
+import { ChevronsUpDown, Globe, SatelliteIcon } from "lucide-vue-next";
 import { ref } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
+import { Planet } from "~/classes/bodies/planet";
+import { Satellite } from "~/classes/bodies/satellite";
 import { bodies } from "#imports";
 import {
     DropdownMenuContent,
@@ -34,8 +36,6 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarMenuButton } from "../ui/sidebar";
-import { ISS } from "~/classes/bodies/iss";
-import { Earth } from "~/classes/bodies/earth";
 
 const dropdownOpen = ref(false);
 const selectedBody = defineModel<CelestialBody | undefined>("selectedBody", {
@@ -43,11 +43,11 @@ const selectedBody = defineModel<CelestialBody | undefined>("selectedBody", {
 });
 
 const getIconForBody = (body?: CelestialBody) => {
-    if (body instanceof ISS) {
-        return Satellite;
+    if (body instanceof Satellite) {
+        return SatelliteIcon;
     }
 
-    if (body instanceof Earth) {
+    if (body instanceof Planet) {
         return Globe;
     }
 

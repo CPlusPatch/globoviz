@@ -1,6 +1,6 @@
 import { Euler, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
-import type { Orbit } from "../orbits";
+import { Orbit, type OrbitParameters } from "../orbits";
 
 export interface Atmosphere {
     /** Density, in kg/m³ */
@@ -29,7 +29,7 @@ export interface CelestialBodyParameters {
     /** Atmosphere */
     atmosphere: Atmosphere | null;
     /** Orbits */
-    orbit: Orbit;
+    orbit: OrbitParameters;
     /** g, in m/s² */
     g: number;
 }
@@ -38,7 +38,20 @@ export interface CelestialBodyParameters {
  * Celestial body
  */
 export class CelestialBody {
-    constructor(public parameters: CelestialBodyParameters) {}
+    public orbit: Orbit;
+
+    constructor(public params: CelestialBodyParameters) {
+        this.orbit = new Orbit(params.orbit);
+    }
+
+    set parameters(parameters: CelestialBodyParameters) {
+        this.params = parameters;
+        this.orbit = new Orbit(parameters.orbit);
+    }
+
+    get parameters(): CelestialBodyParameters {
+        return this.params;
+    }
 
     /**
      * Calculate the rotation of the body for a given date
@@ -50,7 +63,7 @@ export class CelestialBody {
     private getRotationForDate = (date: Date): number => {
         const msSinceEpoch = date.getTime();
         const msSince1970 = msSinceEpoch - 0;
-        const msPerDay = 1000 * this.parameters.rotationPeriod;
+        const msPerDay = 1000 * this.params.rotationPeriod;
         const daysSince1970 = msSince1970 / msPerDay;
         const rotation = (daysSince1970 * Math.PI * 2) % (Math.PI * 2);
 
@@ -67,7 +80,7 @@ export class CelestialBody {
         rotation: Euler;
     } {
         const yawRotation = this.getRotationForDate(date);
-        const pitchRotation = degToRad(this.parameters.axialTilt);
+        const pitchRotation = degToRad(this.params.axialTilt);
 
         return {
             position: new Vector3(0, 0, 0),
@@ -82,8 +95,9 @@ export class CelestialBody {
      * @returns {number} Orbital period in seconds
      */
     public calculateOrbitalPeriod(): number {
-        const { semiMajorAxis } = this.parameters.orbit.parameters;
-        const parent = this.parameters.orbit.parameters.parent;
+        const { semiMajorAxis, parent } = this.orbit.parameters;
+
+        console.log(semiMajorAxis, parent);
 
         if (!parent) {
             throw new Error("Can't calculate orbital period without a parent");

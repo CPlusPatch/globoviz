@@ -25,7 +25,7 @@ import { Color, Vector3 } from "three";
 import { computed, ref } from "vue";
 import ecef from "~/assets/data/ecef.json";
 import earthTexture from "~/assets/textures/8081_earthmap10k.jpg";
-import { Earth } from "~/classes/bodies/earth";
+import { Earth } from "~/classes/bodies/planets/earth";
 import type { ECEF } from "~/classes/renderer";
 import { parameters, useIntervalFn, useNewBody } from "#imports";
 import OrbitVue from "./orbit.vue";
