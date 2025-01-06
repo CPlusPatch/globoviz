@@ -12,7 +12,7 @@
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
                         <span>The angle of the body's axis relative to its orbit</span>
-                        <span>{{ value }}&deg;</span>
+                        <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -32,7 +32,7 @@
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
                         <span></span>
-                        <span>{{ value }}m</span>
+                        <span>{{ formatDistance(value) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -48,7 +48,7 @@
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
                         <span>The shape of the orbit</span>
-                        <span>{{ value }}</span>
+                        <span>{{ formatScalar(value) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -64,7 +64,7 @@
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
                         <span>The angle of the orbit relative to the equator</span>
-                        <span>{{ value }}&deg;</span>
+                        <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -80,7 +80,7 @@
                     </FormControl>
                     <FormDescription class="flex justify-between gap-2">
                         <span>The angle of the orbit's ascending node relative to the vernal equinox</span>
-                        <span>{{ value }}&deg;</span>
+                        <span>{{ formatAngle(value) }}</span>
                     </FormDescription>
                     <FormMessage />
                 </FormItem>
@@ -126,6 +126,26 @@ import { Slider } from "../ui/slider";
 const body = defineModel<CelestialBody>("selectedBody", {
     required: true,
 });
+
+const formatDistance = (distance: number) =>
+    Intl.NumberFormat(undefined, {
+        maximumFractionDigits: 2,
+        unit: distance > 1_000_000 ? "kilometer" : "meter",
+        style: "unit",
+        unitDisplay: "short",
+    }).format(distance > 1_000_000 ? distance / 1_000 : distance);
+
+const formatAngle = (angle: number) =>
+    Intl.NumberFormat(undefined, {
+        maximumFractionDigits: 2,
+        style: "unit",
+        unit: "degree",
+    }).format(angle);
+
+const formatScalar = (scalar: number) =>
+    Intl.NumberFormat(undefined, {
+        maximumFractionDigits: 2,
+    }).format(scalar);
 
 // Workaround the fact that parent is a class, not a plain object, which means it can't be watched
 const parameters = reactive({

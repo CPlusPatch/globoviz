@@ -68,34 +68,6 @@
                                 <FormMessage />
                             </FormItem>
                         </FormField>
-                        <FormField v-slot="{ componentField, value }" name="hoursInDay"
-                            v-model:model-value="parameters.time.hoursInDay">
-                            <FormItem>
-                                <FormLabel>Day Length</FormLabel>
-                                <FormControl>
-                                    <Input type="number" v-bind="componentField" :min="1" :max="1000" />
-                                    <FormDescription class="flex justify-between gap-2">
-                                        <span></span>
-                                        <span>{{ value }} hours</span>
-                                    </FormDescription>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
-                        <FormField v-slot="{ componentField, value }" name="daysInYear"
-                            v-model:model-value="parameters.time.daysInYear">
-                            <FormItem>
-                                <FormLabel>Year Length</FormLabel>
-                                <FormControl>
-                                    <Input type="number" v-bind="componentField" :min="1" :max="1000" />
-                                    <FormDescription class="flex justify-between gap-2">
-                                        <span></span>
-                                        <span>{{ value }} days</span>
-                                    </FormDescription>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        </FormField>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </Form>
