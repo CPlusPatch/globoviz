@@ -11,13 +11,12 @@ import { Line2 } from "@tresjs/cientos";
 import { Color, type Vector3 } from "three";
 import { type ComputedRef, computed, ref, watch } from "vue";
 import { Earth } from "~/classes/bodies/planets/earth";
-import { Satellite } from "~/classes/bodies/satellite";
-import { issParameters } from "~/classes/bodies/satellites/iss";
+import { Iss } from "~/classes/bodies/satellites/iss";
 import type { Orbit } from "~/classes/orbits";
 import { parameters, useIntervalFn, useNewBody } from "#imports";
 
 const parent = new Earth();
-const body = useNewBody(new Satellite(issParameters(parent)));
+const body = useNewBody(new Iss(parent));
 const orbit: ComputedRef<Orbit> = computed(
     () => body.value.orbit,
 ) as ComputedRef<Orbit>;
