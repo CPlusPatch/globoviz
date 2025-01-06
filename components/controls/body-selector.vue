@@ -15,7 +15,7 @@
             </SidebarMenuButton>
         </PopoverTrigger>
         <PopoverContent class="w-[--radix-popover-trigger-width] p-0" align="start">
-            <Command v-model="selectedBody">
+            <Command v-model="selectedBody" :filter-function="(body, term) => bodies.filter((body) => body.parameters.name.toLowerCase().includes(term.toLowerCase()))">
                 <CommandInput placeholder="Search bodies..." />
                 <CommandEmpty>No bodies found.</CommandEmpty>
                 <CommandList>
