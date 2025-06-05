@@ -11,25 +11,17 @@
 import { useTexture } from "@tresjs/core";
 import { Color, Vector3 } from "three";
 import { computed } from "vue";
-import ecef from "~/assets/data/ecef.json";
 import sunTexture from "~/assets/textures/2k_sun.jpg";
 import type { Sun } from "~/classes/bodies/planets/sun";
-import type { ECEF } from "~/classes/renderer";
-import { parameters, useNewBody } from "#imports";
+import { parameters } from "#imports";
 
 const { sun } = defineProps<{
     sun: Sun;
 }>();
 
-useNewBody(sun);
-
-const position = computed(() =>
-    new Vector3(...(ecef as ECEF).sun[0]).multiplyScalar(
-        parameters.physics.ecefScale,
-    ),
-);
+const position = computed(() => new Vector3(0, 0, 0));
 const radius = computed(
-    () => sun.parameters.radius * parameters.physics.sizeScale,
+    () => sun.parameters.radius * parameters.physics.sizeScale * 1e-3,
 );
 
 const textures = await useTexture({

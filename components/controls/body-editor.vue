@@ -132,7 +132,6 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from "vue";
 import type { CelestialBody } from "~/classes/bodies";
-import { Satellite } from "~/classes/bodies/satellite";
 import {
     FormDescription,
     FormField,
@@ -211,7 +210,4 @@ const periapsis = computed(
 const parentRadius = computed(
     () => body.value.orbit.parameters.parent?.parameters.radius,
 );
-
-const calculateSemiMajorAxis = (apoapsis: number, periapsis: number) =>
-    (apoapsis + periapsis) / 2;
 </script>

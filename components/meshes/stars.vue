@@ -25,10 +25,12 @@ const setStars = () => {
         position: [number, number, number],
         scale: number,
     ): number[] => {
+        const FACTOR = 0.4;
+
         return [
-            position[0] * scale * parameters.physics.ecefScale * 0.2,
-            position[1] * scale * parameters.physics.ecefScale * 0.2,
-            position[2] * scale * parameters.physics.ecefScale * 0.2,
+            position[0] * scale * parameters.physics.ecefScale * FACTOR,
+            position[1] * scale * parameters.physics.ecefScale * FACTOR,
+            position[2] * scale * parameters.physics.ecefScale * FACTOR,
         ];
     };
 

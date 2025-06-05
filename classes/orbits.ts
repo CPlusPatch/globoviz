@@ -75,4 +75,21 @@ export class Orbit {
             semiMajorAxis * (1 - eccentricity),
         ];
     }
+
+    /**
+     * Calculates the world position, going up the chain of parents until the root body
+     *
+     * @param i Range from 0 to 1
+     * @returns World position
+     */
+    public calculateWorldPosition(i: number): Vector3 {
+        const { parent } = this.parameters;
+
+        if (!parent) return this.calculatePoints(i);
+
+        const parentPosition = parent.orbit.calculateWorldPosition(i);
+        const localPosition = this.calculatePoints(i);
+
+        return parentPosition.add(localPosition);
+    }
 }

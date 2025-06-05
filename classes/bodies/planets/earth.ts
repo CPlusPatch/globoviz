@@ -1,6 +1,4 @@
-import { Orbit } from "../../orbits";
 import { Planet } from "../planet";
-import { Sun } from "./sun";
 
 export class Earth extends Planet {
     constructor() {
@@ -11,7 +9,7 @@ export class Earth extends Planet {
             axialTilt: 23.5,
             name: "Earth",
             orbit: {
-                parent: new Sun(),
+                parent: null,
                 semiMajorAxis: 1.496e11,
                 argumentOfPeriapsis: 288.064,
                 eccentricity: 0.0167,

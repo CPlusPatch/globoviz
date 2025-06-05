@@ -50,7 +50,7 @@ import type { CelestialBody } from "~/classes/bodies";
 import { Planet } from "~/classes/bodies/planet";
 import { Sun } from "~/classes/bodies/planets/sun";
 import { Satellite } from "~/classes/bodies/satellite";
-import { bodies } from "#imports";
+import { bodies, selectedBody } from "#imports";
 import {
     Command,
     CommandEmpty,
@@ -63,11 +63,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SidebarMenuButton } from "../ui/sidebar";
 
 const open = ref(false);
-const selectedBody = defineModel<CelestialBody | undefined>("selectedBody", {
-    required: true,
-});
 
-const getIconForBody = (body?: CelestialBody) => {
+const getIconForBody = (body: CelestialBody | null) => {
     if (body instanceof Satellite) {
         return SatelliteIcon;
     }

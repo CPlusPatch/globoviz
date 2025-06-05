@@ -4,7 +4,7 @@
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <BodySelector v-model:selected-body="selectedBody" />
+                    <BodySelector />
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarHeader>
@@ -15,38 +15,34 @@
                 <SidebarGroup>
                     <SidebarGroupLabel>Physics</SidebarGroupLabel>
                     <SidebarGroupContent class="px-2 space-y-4">
-                        <FormField v-slot="{ componentField, value, setValue }" name="axialTilt"
-                            v-model:model-value="parameters.physics.axialTilt">
-                            <FormField v-slot="{ componentField, value }" name="ecefScale"
-                            v-model:model-value="parameters.physics.ecefScale">
-                                <FormItem>
-                                    <FormLabel>Distance Scale</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" v-bind="componentField" :min="-100_000_000"
-                                            :max="100_000_000" />
-                                        <FormDescription class="flex justify-between gap-2">
-                                            <span></span>
-                                            <span>{{ value }}x</span>
-                                        </FormDescription>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            </FormField>
-                            <FormField v-slot="{ componentField, value }" name="sizeScale"
+                        <FormField v-slot="{ componentField, value }" name="distanceScale"
+                            v-model:model-value="parameters.physics.distanceScale">
+                            <FormItem>
+                                <FormLabel>Distance Scale</FormLabel>
+                                <FormControl>
+                                    <Input type="number" v-bind="componentField" :min="1e-10" :max="1" />
+                                    <FormDescription class="flex justify-between gap-2">
+                                        <span></span>
+                                        <span>{{ value }}x</span>
+                                    </FormDescription>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        </FormField>
+                        <FormField v-slot="{ componentField, value }" name="sizeScale"
                             v-model:model-value="parameters.physics.sizeScale">
-                                <FormItem>
-                                    <FormLabel>Size Scale</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" v-bind="componentField" :min="1e-10"
-                                            :max="1e-3" :step="1e-6" />
-                                        <FormDescription class="flex justify-between gap-2">
-                                            <span></span>
-                                            <span>{{ value }}x</span>
-                                        </FormDescription>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            </FormField>
+                            <FormItem>
+                                <FormLabel>Size Scale</FormLabel>
+                                <FormControl>
+                                    <Input type="number" v-bind="componentField" :min="1e-10" :max="1e-3"
+                                        :step="1e-6" />
+                                    <FormDescription class="flex justify-between gap-2">
+                                        <span></span>
+                                        <span>{{ value }}x</span>
+                                    </FormDescription>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         </FormField>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -80,8 +76,6 @@
 
 <script lang="ts" setup>
 import { Form } from "vee-validate";
-import { type Ref, ref } from "vue";
-import type { CelestialBody } from "~/classes/bodies";
 import {
     Sidebar,
     SidebarContent,
@@ -93,7 +87,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "~/components/ui/sidebar";
-import { parameters } from "#imports";
+import { parameters, selectedBody } from "#imports";
 import { DatetimePicker } from "../ui/datetime-picker";
 import {
     FormControl,
@@ -110,13 +104,11 @@ const currentTime = defineModel<Date>("current-time", {
     default: new Date(),
 });
 
-const selectedBody: Ref<CelestialBody | undefined> = ref(undefined);
-
 export interface SimulationConfig {
     physics: {
-        axialTilt: number;
         ecefScale: number;
         sizeScale: number;
+        distanceScale: number;
     };
     time: {
         scale: number;

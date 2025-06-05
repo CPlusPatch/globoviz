@@ -4,6 +4,7 @@
             <TresSphereGeometry :args="[radius, 32, 32]" />
             <TresMeshLambertMaterial :map="textures.map" />
         </TresMesh>
+
         <!-- Planet axis -->
         <Line2
             :points="[[0, -1.5 * 1e7 * parameters.physics.sizeScale * radius, 0], [0, 1.5 * 1e7 * parameters.physics.sizeScale * radius, 0]]"
@@ -27,51 +28,47 @@ import { useTexture } from "@tresjs/core";
 import { Color, Euler, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { computed, ref } from "vue";
-import ecef from "~/assets/data/ecef.json";
 import earthTexture from "~/assets/textures/8081_earthmap10k.jpg";
 import type { Planet } from "~/classes/bodies/planet";
 import type { Satellite } from "~/classes/bodies/satellite";
-import type { ECEF } from "~/classes/renderer";
-import { parameters, useIntervalFn, useNewBody } from "#imports";
+import { parameters, useIntervalFn } from "#imports";
 import OrbitVue from "./orbit.vue";
 
-const { planet } = defineProps<{
+const { planet, sats } = defineProps<{
     planet: Planet;
     sats?: Satellite[];
 }>();
 
-const sunPosition = computed(() =>
-    new Vector3(...(ecef as ECEF).sun[0]).multiplyScalar(
-        parameters.physics.ecefScale,
-    ),
+const sunPosition = new Vector3(0, 0, 0); // The sun is at the origin in this model
+
+const position = computed(() =>
+    planet.orbit
+        .calculateWorldPosition(0)
+        .multiplyScalar(parameters.physics.distanceScale),
 );
 
-const body = useNewBody(planet);
-
-const position = computed(() => new Vector3(0, 0, 0));
 const radius = computed(
-    () => body.value.parameters.radius * parameters.physics.sizeScale,
+    () => planet.parameters.radius * parameters.physics.sizeScale,
 );
 
 // Light should be positioned between the sun and the earth, at a distance of 2*radius of the earth from the earth
+// Set to position moved towards the sun by 2*radius
 const lightPosition = computed(() =>
-    sunPosition.value
-        .sub(position.value)
-        .normalize()
-        .multiplyScalar(2000 * radius.value),
+    sunPosition.clone().sub(
+        position.value
+            .clone()
+            .normalize()
+            .multiplyScalar(2 * radius.value),
+    ),
 );
 
 const textures = await useTexture({
     map: earthTexture,
 });
 
-const rotation = ref(
-    body.value.getPositionAndRotationForDate(new Date()).rotation,
-);
+const rotation = ref(planet.getPositionAndRotationForDate(new Date()).rotation);
 
 useIntervalFn(() => {
-    rotation.value = body.value.getPositionAndRotationForDate(
-        new Date(),
-    ).rotation;
+    rotation.value = planet.getPositionAndRotationForDate(new Date()).rotation;
 }, 10);
 </script>

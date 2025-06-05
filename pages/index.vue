@@ -10,9 +10,7 @@
 <script lang="ts" setup>
 import { onUnmounted, ref } from "vue";
 import { SFXPlayer } from "~/classes/audio";
-import Sidebar, {
-    type SimulationConfig,
-} from "~/components/controls/sidebar.vue";
+import Sidebar from "~/components/controls/sidebar.vue";
 import GlobeVisualisation from "~/components/scene/globe-visualisation.vue";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 

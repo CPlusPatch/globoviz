@@ -5,7 +5,8 @@ const useParameters = (): Reactive<SimulationConfig> => {
     return reactive({
         physics: {
             ecefScale: 1e3,
-            sizeScale: 1e-7,
+            sizeScale: 1e-6,
+            distanceScale: 1e-9,
         },
         time: {
             scale: 1,

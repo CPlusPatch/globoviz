@@ -12,34 +12,37 @@ import { Color, type Vector3 } from "three";
 import { type ComputedRef, computed, ref } from "vue";
 import type { Satellite } from "~/classes/bodies/satellite";
 import type { Orbit } from "~/classes/orbits";
-import { parameters, useIntervalFn, useNewBody } from "#imports";
+import { parameters, useIntervalFn } from "#imports";
 
 const { satellite } = defineProps<{
     satellite: Satellite;
 }>();
 
-const body = useNewBody(satellite);
 const orbit: ComputedRef<Orbit> = computed(
-    () => body.value.orbit,
+    () => satellite.orbit,
 ) as ComputedRef<Orbit>;
 
 const orbitResolution = 1000;
 const points = computed(() => {
     const points: Vector3[] = [];
+
     for (let i = 0; i <= orbitResolution; i++) {
         const position = orbit.value
             .calculatePoints(i / orbitResolution)
             .multiplyScalar(parameters.physics.sizeScale);
+
         points.push(position);
     }
+
+    console.log(points[0]);
     return points;
 });
 
 // milliseconds
 const animationDuration = computed(
-    () => (body.value.calculateOrbitalPeriod() * 1000) / parameters.time.scale,
+    () => (satellite.calculateOrbitalPeriod() * 1000) / parameters.time.scale,
 );
-const ratioShown = ref(1.0);
+const ratioShown = ref(0.5);
 const offset = ref(0);
 
 const finalPoints = computed(() => {

@@ -1,14 +1,16 @@
 <template>
-    <div class="flex flex-1 bg-black relative">
+    <div class="flex flex-1 bg-black relative max-w-[100vw]">
         <header class="flex h-16 shrink-0 bg-background items-center gap-2 border-b border-l rounded-bl px-4 absolute right-0 z-10">
             <SidebarTrigger class="-ml-1" />
         </header>
 
         <Footer class="absolute left-0 bottom-0 z-10" />
 
-        <TresCanvas :realistic="true" clear-color="#000">
-            <TresPerspectiveCamera :position="[3, 3, 3]" />
-            <OrbitControls />
+        <TresCanvas :realistic="false" clear-color="#000">
+            <TresPerspectiveCamera />
+            <OrbitControls :target="selectedBody?.orbit
+            .calculateWorldPosition(0)
+            .multiplyScalar(parameters.physics.distanceScale) ?? [0, 0, 0]" />
 
             <Suspense>
                 <SunMesh :sun="sun" />
@@ -35,13 +37,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useProgress } from "@tresjs/cientos";
+import { OrbitControls, useProgress } from "@tresjs/cientos";
 import { BloomPmndrs, EffectComposerPmndrs } from "@tresjs/post-processing";
 import { Planet } from "~/classes/bodies/planet";
 import { Sun } from "~/classes/bodies/planets/sun";
 import { Satellite } from "~/classes/bodies/satellite";
 import { solarSystem } from "~/classes/bodies/solarsystem";
 import { TresCanvas } from "#components";
+import { parameters, selectedBody } from "#imports";
 import PlanetMesh from "../meshes/planet.vue";
 import Stars from "../meshes/stars.vue";
 import SunMesh from "../meshes/sun.vue";
@@ -53,11 +56,11 @@ const date = defineModel<Date>("currentTime", {
     default: new Date(),
 });
 
+const { hasFinishLoading } = await useProgress();
+
 const sun = solarSystem.find((body) => body instanceof Sun) as Sun;
 const planets = solarSystem.filter(
     (body) => body instanceof Planet && !(body instanceof Sun),
 );
 const sats = solarSystem.filter((body) => body instanceof Satellite);
-
-const { hasFinishLoading } = await useProgress();
 </script>
